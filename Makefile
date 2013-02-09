@@ -16,7 +16,7 @@ SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
 OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
 
 DEBUG    = -g
-INCLUDES = -I./inc
+INCLUDES = -I./external
 CFLAGS   = -Wall -pedantic -ansi -c $(DEBUG) $(INCLUDES)
 LDFLAGS  = -lGLEW -lglut -lGLU
 
