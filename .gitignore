@@ -14,3 +14,7 @@
 
 # Emacs autosave files
 *~
+
+# Binary and Object directories
+bin/
+obj/
