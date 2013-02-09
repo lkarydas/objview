@@ -1,0 +1,7 @@
+2011-11-03 Laz <lkarydas@gmail.com>
+	* src/libobj.cpp Added support for groups of vertices and materials
+	* src/libobj.cpp Each model has each own VAO and each group of vertices each own VBO
+
+2011-10-23 Laz <lkarydas@gmail.com>
+	* src/libobj.cpp Added a stub function for reading PPM that does not require size input
+	* src/libobj.cpp Added functionality to load vertices and normals into VBO
