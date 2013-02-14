@@ -30,9 +30,9 @@ endif
 
 .PHONY: run clean distclean
 
-all: $(BINDIR)/$(APP)
 
-run: all
+
+all: $(BINDIR)/$(APP)
 	@echo "Executing..."
 	@cd $(BINDIR); ./$(APP) $(ARGS) 
 
