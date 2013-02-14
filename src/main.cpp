@@ -47,7 +47,7 @@ void mouseMotionCB(int x, int y)
   if (mouseDown)
     {
       yrot = x - xdiff;
-      xrot = -y - ydiff;
+      xrot = y + ydiff;
       glutPostRedisplay();
     }
 }
@@ -90,12 +90,10 @@ void display(void)
 
   // Use our shader
   glUseProgram(programID);
-  // Send our transformation to the currently bound shader, 
+  // Send the model, view and projection matrices to the shader 
   glUniformMatrix4fv(modelID, 1, GL_FALSE, &model[0][0]);
   glUniformMatrix4fv(viewID, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionID, 1, GL_FALSE, &projection[0][0]);
-
-
 
   glmDrawVBO(objModel, programID);
 
@@ -152,12 +150,17 @@ void init()
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
   projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
   // Camera matrix
-  view = glm::lookAt( glm::vec3(4,3,-3), // Camera is at (4,3,-3), in World Space
+  view = glm::lookAt( glm::vec3(0,1,3), // Camera is at (4,3,-3), in World Space
 		      glm::vec3(0,0,0), // and looks at the origin
 		      glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 		      );
   // Model matrix : an identity matrix (model will be at the origin)
   model      = glm::mat4(1.0f);
+
+  // Initialize a light
+  glm::vec4 lightPosition = glm::vec4(-20, -10, 0, 0);
+  glUniform4fv( glGetUniformLocation(programID, "lightPos"),1, &lightPosition[0]); 
+
 }
 
 
@@ -170,7 +173,10 @@ void getGLinfo()
 }
 void reshape( int width, int height )
 {
-
+  glViewport(0, 0, width, height);
+  GLfloat aspectRatio = GLfloat(width)/height;
+  projection = glm::perspective(45.0f, aspectRatio, 0.1f, 100.0f);
+  glutPostRedisplay();
 }
 int main(  int argc, char **argv  )
 {
