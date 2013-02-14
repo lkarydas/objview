@@ -120,8 +120,8 @@ void init()
   // Load the model (vertices and normals) into a vertex buffer
   glmLoadInVBO(objModel);
 
-  // Dark blue background
-  glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+  // Black background
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
   // Enable depth test
   glEnable(GL_DEPTH_TEST);
@@ -140,9 +140,9 @@ void init()
   viewID = glGetUniformLocation(programID, "view");
   projectionID = glGetUniformLocation(programID, "projection");
 
-  glm::vec4 light_ambient = glm::vec4( 0.9, 0.2, 0.2, 1.0 );
-  glm::vec4 light_diffuse = glm::vec4 ( 1.0, 1.0, 1.0, 1.0 );
-  glm::vec4 light_specular =glm::vec4( 1.0, 1.0, 1.0, 1.0 );
+  glm::vec4 light_ambient = glm::vec4( 0.2, 0.2, 0.2, 1.0 );
+  glm::vec4 light_diffuse = glm::vec4 ( 0.8, 1.0, 1.0, 1.0 );
+  glm::vec4 light_specular =glm::vec4( 0.8, 1.0, 1.0, 1.0 );
 
   glm::vec4 material_ambient =glm::vec4( 0.5, 0.0, 0.0, 1.0 );
   glm::vec4 material_diffuse =glm::vec4 (1.0, 0.8, 0.0, 1.0 );
