@@ -11,14 +11,14 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform vec4 lightPos;
+
 out vec3 fN;
 out vec3 fE;
 out vec3 fL;
 
 void main()
 {	
-
-  vec4 lightPos = vec4(10, -10, 0, 0);
   vec3 pos = (view * model * vec4(vertexPosition,1)).xyz;
   fN = normalize((view * model * vec4(vertexNormal,0.0)).xyz);
   fL = -(view * lightPos).xyz;
