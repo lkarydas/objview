@@ -26,6 +26,8 @@ v-0.7
 
 #include "libobj.h"
 
+
+
 #include <iostream>
 using namespace std;
 
@@ -1950,9 +1952,9 @@ GLvoid glmLoadInVBO(GLMmodel* model)
 	  continue;
 	}
       // Reserve memory space for VBO vertices
-      vec4* points = (vec4*)malloc(sizeof(vec4) * numPointsInVBO);
+      glm::vec4* points = (glm::vec4*)malloc(sizeof(glm::vec4) * numPointsInVBO);
       // Reserve memory space for VBO normals
-      vec3* normals = (vec3*)malloc(sizeof(vec3) * numPointsInVBO);
+      glm::vec3* normals = (glm::vec3*)malloc(sizeof(glm::vec3) * numPointsInVBO);
 
       int counter = 0;
       // Prepare data for buffers
@@ -1966,12 +1968,12 @@ GLvoid glmLoadInVBO(GLMmodel* model)
 	      x = model->vertices[3*T.vindices[j] +0];
 	      y = model->vertices[3*T.vindices[j] +1];
 	      z = model->vertices[3*T.vindices[j] +2];
-	      points[counter] = vec4(x, y, z, 1);
+	      points[counter] = glm::vec4(x, y, z, 1);
 
 	      x = model->normals[3*T.nindices[j] +0];
 	      y = model->normals[3*T.nindices[j] +1];
 	      z = model->normals[3*T.nindices[j] +2];
-	      normals[counter] = vec3(x, y, z);
+	      normals[counter] = glm::vec3(x, y, z);
 	      counter++;
 	    }
 	}
@@ -1980,17 +1982,22 @@ GLvoid glmLoadInVBO(GLMmodel* model)
       int sizeNormals = sizeof(GLfloat)*3*numPointsInVBO;
       int sizeTotal   = sizePoints + sizeNormals; 
       // Create and initialize a buffer object for this group
-      GLuint buffer;
-      glGenBuffers( 1, &buffer );
-      glBindBuffer( GL_ARRAY_BUFFER, buffer );
-      glBufferData( GL_ARRAY_BUFFER, sizeTotal, NULL, GL_STATIC_DRAW );
-      glBufferSubData( GL_ARRAY_BUFFER, 0, sizePoints, points);
-      glBufferSubData( GL_ARRAY_BUFFER, sizePoints, sizeNormals, normals );
+      GLuint vertexBuffer;
+      glGenBuffers( 1, &vertexBuffer );
+      glBindBuffer( GL_ARRAY_BUFFER, vertexBuffer );
+      glBufferData( GL_ARRAY_BUFFER, sizePoints, points, GL_STATIC_DRAW );
+
+      GLuint normalBuffer;
+      glGenBuffers( 1, &normalBuffer );
+      glBindBuffer( GL_ARRAY_BUFFER, normalBuffer );
+      glBufferData( GL_ARRAY_BUFFER, sizeNormals, normals, GL_STATIC_DRAW );
+
       // Vertices are loaded into server memomory, realease client memory
       free(points);
       free(normals);
       // Return the vertex array object number
-      group->buffer = buffer;
+      group->vertexBuffer = vertexBuffer;
+      group->normalBuffer = normalBuffer;
       group = group->next;
  
     }
@@ -2017,7 +2024,7 @@ glmDrawVBO(GLMmodel* model, GLuint program)
 	  group = group->next;
 	  continue;
 	}
-      glBindBuffer( GL_ARRAY_BUFFER, group->buffer );
+
       glUseProgram( program );
       // Get a pointer to the material for this group
 
@@ -2029,13 +2036,20 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       glUniform1f( glGetUniformLocation(program, "mat_transparency"),material->transparency );
       // Bind the vertices and normals to the shader
       vPosition = glGetAttribLocation( program, "vertex" );
-      glEnableVertexAttribArray( vPosition );
-      glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0,BUFFER_OFFSET(0) );
-      vNormal = glGetAttribLocation( program, "normal" );
-      GLuint offset = sizeof(GLfloat)*4*3*group->numtriangles;
-      glEnableVertexAttribArray( vNormal );
-      glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offset));
+
+      // 1rst attribute buffer : vertices
+      glEnableVertexAttribArray(0); // TODO this 0 has to change
+      glBindBuffer( GL_ARRAY_BUFFER, group->vertexBuffer );
+      glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+      glEnableVertexAttribArray(1); // TODO this 0 has to change
+      glBindBuffer( GL_ARRAY_BUFFER, group->normalBuffer );
+      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+
       glDrawArrays( GL_TRIANGLES, 0, 3 * group->numtriangles );	  
+      glDisableVertexAttribArray(0);
+      glDisableVertexAttribArray(1);
       group = group->next;
     }
 
@@ -2048,7 +2062,7 @@ glmDrawVBO(GLMmodel* model, GLuint program)
 	  group = group->next;
 	  continue;
 	}
-      glBindBuffer( GL_ARRAY_BUFFER, group->buffer );
+
       glUseProgram( program );
       // Get a pointer to the material for this group
 
@@ -2059,15 +2073,20 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       glUniform1f( glGetUniformLocation(program, "mat_shininess"),material->shininess );
       glUniform1f( glGetUniformLocation(program, "mat_transparency"),material->transparency );
       // Bind the vertices and normals to the shader
-      vPosition = glGetAttribLocation( program, "vertex" );
-      glEnableVertexAttribArray( vPosition );
-      glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0,BUFFER_OFFSET(0) );
-      vNormal = glGetAttribLocation( program, "normal" );
-      GLuint offset = sizeof(GLfloat)*4*3*group->numtriangles;
-      glEnableVertexAttribArray( vNormal );
-      glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offset));
+
+      // 1rst attribute buffer : vertices
+      glEnableVertexAttribArray(0); // TODO this 0 has to change
+      glBindBuffer( GL_ARRAY_BUFFER, group->vertexBuffer );
+      glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+      glEnableVertexAttribArray(1); // TODO this 0 has to change
+      glBindBuffer( GL_ARRAY_BUFFER, group->normalBuffer );
+      glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+
       glDrawArrays( GL_TRIANGLES, 0, 3 * group->numtriangles );	  
       group = group->next;
+
     }
 
 
