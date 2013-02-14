@@ -47,7 +47,7 @@ void mouseMotionCB(int x, int y)
   if (mouseDown)
     {
       yrot = x - xdiff;
-      xrot = y + ydiff;
+      xrot = -y - ydiff;
       glutPostRedisplay();
     }
 }
@@ -140,28 +140,14 @@ void init()
   viewID = glGetUniformLocation(programID, "view");
   projectionID = glGetUniformLocation(programID, "projection");
 
-  glm::vec4 light_ambient = glm::vec4( 0.2, 0.2, 0.2, 1.0 );
+  glm::vec4 light_ambient = glm::vec4( 0.1, 0.1, 0.1, 0.5 );
   glm::vec4 light_diffuse = glm::vec4 ( 0.8, 1.0, 1.0, 1.0 );
   glm::vec4 light_specular =glm::vec4( 0.8, 1.0, 1.0, 1.0 );
 
-  glm::vec4 material_ambient =glm::vec4( 0.5, 0.0, 0.0, 1.0 );
-  glm::vec4 material_diffuse =glm::vec4 (1.0, 0.8, 0.0, 1.0 );
-  glm::vec4 material_specular =glm::vec4( 1.0, 0.8, 0.0, 1.0 );
-  float  material_shininess = 30.0;
-
-  glm::vec4 ambient_product = light_ambient * material_ambient;
-  glm::vec4 diffuse_product = light_diffuse * material_diffuse;
-  glm::vec4 specular_product = light_specular * material_specular;
-
-  
   glUseProgram(programID);
   glUniform4fv( glGetUniformLocation(programID, "light_ambient"),1,&light_ambient[0]);
   glUniform4fv( glGetUniformLocation(programID, "light_diffuse"),1, &light_diffuse[0]);
   glUniform4fv( glGetUniformLocation(programID, "light_specular"),1, &light_specular[0]);      
-  glUniform4fv( glGetUniformLocation(programID, "mat_ambient"),1, &material_ambient[0] );
-  glUniform4fv( glGetUniformLocation(programID, "mat_diffuse"),1,&material_diffuse[0] );
-  glUniform4fv( glGetUniformLocation(programID, "mat_specular"),1, &material_specular[0] );
-  glUniform1f( glGetUniformLocation(programID, "mat_shininess"), material_shininess );
 
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
   projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
