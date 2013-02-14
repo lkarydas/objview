@@ -28,7 +28,7 @@ else
 CFLAGS  += -std=gnu99
 endif
 
-.PHONY: all clean distclean
+.PHONY: run clean distclean
 
 all: $(BINDIR)/$(APP)
 
