@@ -133,7 +133,7 @@ void init()
   glBindVertexArray(VertexArrayID);
 
   // Create and compile our GLSL program from the shaders
-  programID = LoadShaders( "vertShader.glsl", "fragShader.glsl" );
+  programID = LoadShaders( "../shaders/vertShader.glsl", "../shaders/fragShader.glsl" );
 
   // Get a handle for our model, view and projection uniforms
   modelID = glGetUniformLocation(programID, "model");
