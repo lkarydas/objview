@@ -30,7 +30,23 @@ v-0.7
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "Angel.h"
+
+#include <GL/glew.h>
+
+
+#include <GL/freeglut.h>
+#include <GL/freeglut_ext.h>
+
+// glm::vec3, glm::vec4, glm::ivec4, glm::mat4
+#include <glm/glm.hpp>
+// glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <glm/gtc/matrix_transform.hpp>
+// glm::value_ptr
+#include <glm/gtc/type_ptr.hpp>
+
+
+
+
 
 
 
@@ -73,7 +89,8 @@ typedef struct _GLMtriangle {
 typedef struct _GLMgroup {
   char*             name;           /* name of this group */
   GLuint            vao;            /* Vertex Array Object Number */
-  GLuint            buffer;
+  GLuint            vertexBuffer;
+  GLuint            normalBuffer;
   GLuint            numtriangles;   /* number of triangles in this group */
   GLuint*           triangles;      /* array of triangle indices */
   GLuint            material;       /* index to material for group */
