@@ -10,6 +10,7 @@ layout(location = 1) in vec3 vertexNormal;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat3 normalMatrix;
 
 uniform vec4 lightPos;
 
@@ -20,7 +21,7 @@ out vec3 fL;
 void main()
 {	
   vec3 pos = (view * model * vec4(vertexPosition,1)).xyz;
-  fN = normalize((view * model * vec4(vertexNormal,0.0)).xyz);
+  fN = normalize(normalMatrix * vertexNormal);
   fL = -(view * lightPos).xyz;
   fE = -pos;
   // Output position of the vertex, in clip space : MVP * position

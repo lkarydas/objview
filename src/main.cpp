@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 
 
 #include <GL/freeglut.h>
@@ -87,6 +88,8 @@ void display(void)
   glm::mat4 xRotMat = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1, 0, 0) );
   glm::mat4 yRotMat = glm::rotate(glm::mat4(1.0f), yrot, glm::vec3(0, 1, 0) );
   model = xRotMat * yRotMat;
+  glm::mat4 modelViewMatrix = view * model;
+  glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(modelViewMatrix)); // Normal Matrix
 
   // Use our shader
   glUseProgram(programID);
@@ -94,7 +97,7 @@ void display(void)
   glUniformMatrix4fv(modelID, 1, GL_FALSE, &model[0][0]);
   glUniformMatrix4fv(viewID, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionID, 1, GL_FALSE, &projection[0][0]);
-
+  glUniformMatrix3fv( glGetUniformLocation(programID, "normalMatrix"), 1, GL_FALSE, &normalMatrix[0][0]);
   glmDrawVBO(objModel, programID);
 
   // Swap buffers
