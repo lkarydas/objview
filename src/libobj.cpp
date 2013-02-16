@@ -1960,7 +1960,7 @@ GLvoid glmLoadInVBO(GLMmodel* model)
       // Prepare data for buffers
       _GLMtriangle T;
       float x, y, z;
-      for (int i = 0; i < group->numtriangles; i++) 
+      for (unsigned int i = 0; i < group->numtriangles; i++) 
 	{
 	  T = model->triangles[group->triangles[i]];
 	  for (int j = 0; j < 3; j++) 
@@ -1980,7 +1980,7 @@ GLvoid glmLoadInVBO(GLMmodel* model)
       // Calculate sizes...
       int sizePoints  = sizeof(GLfloat)*4*numPointsInVBO;
       int sizeNormals = sizeof(GLfloat)*3*numPointsInVBO;
-      int sizeTotal   = sizePoints + sizeNormals; 
+
       // Create and initialize a buffer object for this group
       GLuint vertexBuffer;
       glGenBuffers( 1, &vertexBuffer );
@@ -2007,9 +2007,6 @@ GLvoid glmLoadInVBO(GLMmodel* model)
 GLvoid
 glmDrawVBO(GLMmodel* model, GLuint program)
 {
-  static GLMmaterial* material;
-  GLuint vPosition;
-  GLuint vNormal;
   GLMgroup* group;
   
   // Bind the Vertex Array Object
@@ -2034,8 +2031,6 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       glUniform4fv( glGetUniformLocation(program, "mat_specular"),1,material->specular  );	
       glUniform1f( glGetUniformLocation(program, "mat_shininess"),material->shininess );
       glUniform1f( glGetUniformLocation(program, "mat_transparency"),material->transparency );
-      // Bind the vertices and normals to the shader
-      vPosition = glGetAttribLocation( program, "vertex" );
 
       // 1rst attribute buffer : vertices
       glEnableVertexAttribArray(0); // TODO this 0 has to change
