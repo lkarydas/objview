@@ -82,12 +82,16 @@ void display(void)
 
 {
 
-  // Clear the screen
+  // Clear the screne
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::mat4 xRotMat = glm::rotate(glm::mat4(1.0f), xrot, glm::vec3(1, 0, 0) );
-  glm::mat4 yRotMat = glm::rotate(glm::mat4(1.0f), yrot, glm::vec3(0, 1, 0) );
-  model = xRotMat * yRotMat;
+
+  model = glm::mat4(1.0f);
+  glm::mat4 xRotMat = glm::rotate(glm::mat4(1.0f), xrot, glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(1, 0, 0, 1))) );
+  model = model * xRotMat;
+  glm::mat4 yRotMat = glm::rotate(glm::mat4(1.0f), yrot, glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(0, 1, 0, 1))) );
+  model = model * yRotMat;
+
   glm::mat4 modelViewMatrix = view * model;
   glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(modelViewMatrix)); // Normal Matrix
 
@@ -98,6 +102,7 @@ void display(void)
   glUniformMatrix4fv(viewID, 1, GL_FALSE, &view[0][0]);
   glUniformMatrix4fv(projectionID, 1, GL_FALSE, &projection[0][0]);
   glUniformMatrix3fv( glGetUniformLocation(programID, "normalMatrix"), 1, GL_FALSE, &normalMatrix[0][0]);
+
   glmDrawVBO(objModel, programID);
 
   // Swap buffers
@@ -153,7 +158,7 @@ void init()
   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
   projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
   // Camera matrix
-  view = glm::lookAt( glm::vec3(0,1,3), // Camera is at (4,3,-3), in World Space
+  view = glm::lookAt( glm::vec3(0,0,3), // Camera position in World Space
 		      glm::vec3(0,0,0), // and looks at the origin
 		      glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
 		      );
