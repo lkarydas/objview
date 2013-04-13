@@ -110,10 +110,10 @@ void display(void)
 
 }
 
-void init()
+void init(char* fname)
 {
 
-  objModel = glmReadOBJ("../data/al.obj");
+  objModel = glmReadOBJ(fname);
   if (!objModel) exit(0);
 
 
@@ -189,14 +189,26 @@ void reshape( int width, int height )
 int main(  int argc, char **argv  )
 {
 
+  // TODO: Command-line parsing and error checking
+  char* fname;
+  if (argc == 2)
+    {
+      fname = argv[1];
+    }
+  else
+    {
+      std::cerr << "You have to specify an OBJ file as argument." << std::endl;
+      return 1;
+    }
 
   glutInit( &argc, argv );
   glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
   glutInitWindowSize( 640, 480 );
-  glutCreateWindow( "Bottom Up" );
+
+  glutCreateWindow( "objview" );
   glewInit();
   getGLinfo();
-  init();
+  init(fname);
   glutDisplayFunc( display );
   glutReshapeFunc( reshape );
   glutMouseFunc(mouseCB);
