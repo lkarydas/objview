@@ -1932,6 +1932,7 @@ for (i = 1; i <= model->numvertices; i++) {
 GLvoid glmLoadInVBO(GLMmodel* model)
 {
 
+  cout << "Entering glmLoadInVBO" << endl;
 
   // Create a vertex array object
   GLuint vao;
@@ -1939,7 +1940,7 @@ GLvoid glmLoadInVBO(GLMmodel* model)
   glBindVertexArray( vao );
   model->vao = vao;
 
-  //cout << "Created VAO: " << vao << endl;
+  cout << "Created VAO: " << vao << endl;
 
   GLMgroup* group;
   group = model->groups;
@@ -2007,6 +2008,7 @@ GLvoid glmLoadInVBO(GLMmodel* model)
 GLvoid
 glmDrawVBO(GLMmodel* model, GLuint program)
 {
+  GLMmaterial* material;
   GLMgroup* group;
   
   // Bind the Vertex Array Object
@@ -2015,12 +2017,21 @@ glmDrawVBO(GLMmodel* model, GLuint program)
   group = model->groups;
   while(group)
     {
-      GLMmaterial* material = &model->materials[group->material];
+      material = &model->materials[group->material];
+
+      if ( material == NULL )
+	{
+	  cout << "Initializing default material" << endl;
+	  delete material;  // TODO: Is there a nicer way?
+	  material = new _GLMmaterial();
+	}
+      material->display();
       if (material->transparency < 1.0)
 	{
 	  group = group->next;
 	  continue;
 	}
+      cout << "paok2" << endl;
 
       glUseProgram( program );
       // Get a pointer to the material for this group
@@ -2051,7 +2062,13 @@ glmDrawVBO(GLMmodel* model, GLuint program)
   group = model->groups;
   while(group)
     {
-      GLMmaterial* material = &model->materials[group->material];
+      material = &model->materials[group->material];
+      if ( material == NULL )
+	{
+	  cout << "Initializing default material" << endl;
+	  delete material; // TODO: Do I need this?
+	  material = new _GLMmaterial();
+	}
       if (material->transparency == 1.0)
 	{
 	  group = group->next;
@@ -2083,7 +2100,7 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       group = group->next;
 
     }
-
+  delete material;
 
 }
 
