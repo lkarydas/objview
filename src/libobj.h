@@ -30,6 +30,8 @@ v-0.7
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <iostream>
+using namespace std;
 
 #include <GL/glew.h>
 
@@ -66,6 +68,32 @@ v-0.7
  */
 typedef struct _GLMmaterial
 {
+
+  _GLMmaterial()
+  {
+    name = "default_material";
+    for (int i = 0; i < 4; i++)
+      {
+	diffuse[i] = 0.0;
+	ambient[i] = 0.6;
+	specular[i] = 0.7;
+	emmissive[i] = 0;
+      }
+    shininess = 100;
+    transparency = 0.5;
+  }
+
+  void display()
+  {
+    cout << "Material name: " << name << endl;
+    cout << "Diffuse: [" << diffuse[0] << ", " << diffuse[1] << ", " << diffuse[2] << ", " << diffuse[3] << "]" << endl;
+    cout << "Ambient: [" << ambient[0] << ", " << ambient[1] << ", " << ambient[2] << ", " << ambient[3] << "]" << endl; 
+    cout << "Specular: [" << specular[0] << ", " << specular[1] << ", " << specular[2] << ", " << specular[3] << "]" << endl;
+    cout << "Emmissive: [" << emmissive[0] << ", " << emmissive[1] << ", " << emmissive[2] << ", " << emmissive[3] << "]" << endl;
+    cout << "Shininess: " << shininess << endl;
+    cout << "Transparency: " << transparency << endl;
+  }
+
   char*   name;                 /* name of material */
   GLfloat diffuse[4];           /* diffuse component */
   GLfloat ambient[4];           /* ambient component */
