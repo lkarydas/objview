@@ -2021,17 +2021,16 @@ glmDrawVBO(GLMmodel* model, GLuint program)
 
       if ( material == NULL )
 	{
-	  cout << "Initializing default material" << endl;
+	  //cout << "Initializing default material" << endl;
 	  delete material;  // TODO: Is there a nicer way?
 	  material = new _GLMmaterial();
 	}
-      material->display();
+      //material->display();
       if (material->transparency < 1.0)
 	{
 	  group = group->next;
 	  continue;
 	}
-      cout << "paok2" << endl;
 
       glUseProgram( program );
       // Get a pointer to the material for this group
@@ -2065,8 +2064,8 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       material = &model->materials[group->material];
       if ( material == NULL )
 	{
-	  cout << "Initializing default material" << endl;
-	  delete material; // TODO: Do I need this?
+	  //cout << "Initializing default material" << endl;
+	  //delete material; // TODO: Do I need this?
 	  material = new _GLMmaterial();
 	}
       if (material->transparency == 1.0)
@@ -2100,7 +2099,6 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       group = group->next;
 
     }
-  delete material;
 
 }
 
