@@ -134,9 +134,10 @@ void init(char* fname)
   // Accept fragment if it closer to the camera than the former one
   glDepthFunc(GL_LESS); 
 
-  GLuint VertexArrayID;
-  glGenVertexArrays(1, &VertexArrayID);
-  glBindVertexArray(VertexArrayID);
+  // TODO: Make sure that this is trully unnecessary
+  //GLuint VertexArrayID;
+  //glGenVertexArrays(1, &VertexArrayID);
+  //glBindVertexArray(VertexArrayID);
 
   // Create and compile our GLSL program from the shaders
   programID = LoadShaders( "../shaders/vertShader.glsl", "../shaders/fragShader.glsl" );
