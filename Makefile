@@ -1,5 +1,5 @@
 APP      = objview
-ARGS     = ../data/al.obj
+ARGS     = ../data/cow.obj
 #_________________ Directory Structure
 SRCEXT   = cpp
 SRCDIR   = src
@@ -12,6 +12,7 @@ export PATH:=/home/kary/scripts/:$(PATH)
 SHELL = bash
 
 SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
+HFILES  := $(shell find $(SRCDIR) -name '*.h')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
 OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
 
@@ -41,7 +42,7 @@ $(BINDIR)/$(APP): buildrepo $(OBJS)
 	@echo "Linking $@..."
 	@$(CC) $(OBJS) $(LDFLAGS) -o $@
 
-$(OBJDIR)/%.o: %.$(SRCEXT)
+$(OBJDIR)/%.o: %.$(SRCEXT) $(HFILES)
 	@echo "Generating dependencies for $<..."
 	@$(call make-depend,$<,$@,$(subst .o,.d,$@))
 	@echo "Compiling $<..."
