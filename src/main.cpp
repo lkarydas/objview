@@ -18,7 +18,7 @@
 #include <GL/freeglut.h>
 #include <GL/freeglut_ext.h>
 
-#include "shader.hpp"
+#include "shader.h"
 
 #include "libobj.h"
 
