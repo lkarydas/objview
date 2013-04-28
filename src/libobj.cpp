@@ -1932,7 +1932,7 @@ for (i = 1; i <= model->numvertices; i++) {
 GLvoid glmLoadInVBO(GLMmodel* model)
 {
 
-  cout << "Entering glmLoadInVBO" << endl;
+  //cout << "Entering glmLoadInVBO" << endl;
 
   // Create a vertex array object
   GLuint vao;
@@ -1940,7 +1940,7 @@ GLvoid glmLoadInVBO(GLMmodel* model)
   glBindVertexArray( vao );
   model->vao = vao;
 
-  cout << "Created VAO: " << vao << endl;
+  //cout << "Created VAO: " << vao << endl;
 
   GLMgroup* group;
   group = model->groups;
@@ -2022,7 +2022,6 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       if ( material == NULL )
 	{
 	  //cout << "Initializing default material" << endl;
-	  delete material;  // TODO: Is there a nicer way?
 	  material = new _GLMmaterial();
 	}
       //material->display();
@@ -2065,7 +2064,6 @@ glmDrawVBO(GLMmodel* model, GLuint program)
       if ( material == NULL )
 	{
 	  //cout << "Initializing default material" << endl;
-	  //delete material; // TODO: Do I need this?
 	  material = new _GLMmaterial();
 	}
       if (material->transparency == 1.0)
