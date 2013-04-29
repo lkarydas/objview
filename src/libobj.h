@@ -71,7 +71,8 @@ typedef struct _GLMmaterial
 
   _GLMmaterial()
   {
-    name = "default_material";
+    char default_name[] = "default_material";
+    name = default_name;
     for (int i = 0; i < 4; i++)
       {
 	diffuse[i] = 0.0;
