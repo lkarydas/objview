@@ -7,7 +7,6 @@ OBJDIR   = obj
 BINDIR   = bin
 BAKDIR   = bak
 
-
 export PATH:=/home/kary/scripts/:$(PATH)
 SHELL = bash
 
@@ -16,26 +15,17 @@ HFILES  := $(shell find $(SRCDIR) -name '*.h')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
 OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
 
-DEBUG    = -g
+CC = $(CXX)
+OPTS = -g
 INCLUDES = -I./external
-CFLAGS   = -Wall -pedantic -ansi -c $(DEBUG) $(INCLUDES)
-LDFLAGS  = -lGLEW -lglut -lGLU
-
-
-#_________________________DO NOT EDIT ANYTHING BELOW THIS POINT RE
-ifeq ($(SRCEXT), cpp)
-CC       = $(CXX)
-else
-CFLAGS  += -std=gnu99
-endif
+CPPFLAGS = -Wall -pedantic -ansi -c -std=c++11 $(OPTS) $(INCLUDES)
+LDFLAGS  = -lGL -lGLU -lglut -lGLEW
 
 .PHONY: run clean distclean
 
-
-
 all: $(BINDIR)/$(APP)
 	@echo "Executing..."
-	@cd $(BINDIR); ./$(APP) $(ARGS) 
+	@cd $(BINDIR); ./$(APP) $(ARGS)
 
 $(BINDIR)/$(APP): buildrepo $(OBJS)
 	@mkdir -p `dirname $@`
@@ -46,7 +36,7 @@ $(OBJDIR)/%.o: %.$(SRCEXT) $(HFILES)
 	@echo "Generating dependencies for $<..."
 	@$(call make-depend,$<,$@,$(subst .o,.d,$@))
 	@echo "Compiling $<..."
-	@$(CC) $(CFLAGS) $< -o $@
+	@$(CC) $(CPPFLAGS) $< -o $@ $(LDFLAGS)
 
 clean:
 	@echo "Removing object files..."
@@ -80,13 +70,12 @@ define make-repo
    done
 endef
 
-
 # usage: $(call make-depend,source-file,object-file,depend-file)
 define make-depend
   $(CC) -MM       \
         -MF $3    \
         -MP       \
         -MT $2    \
-        $(CFLAGS) \
+        $(CPPFLAG) \
         $1
 endef
