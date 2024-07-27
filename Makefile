@@ -1,5 +1,5 @@
 APP      = objview
-ARGS     = ../data/cow.obj
+ARGS     = ../data/al.obj
 #_________________ Directory Structure
 SRCEXT   = cpp
 SRCDIR   = src

@@ -31,6 +31,10 @@ glm::mat4 projection;
 GLuint vertexbuffer;
 GLuint normalbuffer;
 
+// Rotation constants.
+const float xrot_rate_multiplier = 0.1f;
+const float yrot_rate_multiplier = 0.1f;
+
 // Rotation interface
 float xrot = 0;
 float yrot = 0;
@@ -76,13 +80,19 @@ void mouseCB(int button, int state, int x, int y)
 void display(void) {
     // Clear the screne.
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     model = glm::mat4(1.0f);
-    glm::mat4 xRotMat = glm::rotate(glm::mat4(1.0f), xrot, glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(1, 0, 0, 1))) );
+    glm::mat4 xRotMat = glm::rotate(
+                            glm::mat4(1.0f),
+                            xrot * xrot_rate_multiplier,
+                            glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(1, 0, 0, 1)))
+                        );
     model = model * xRotMat;
-    glm::mat4 yRotMat = glm::rotate(glm::mat4(1.0f), yrot, glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(0, 1, 0, 1))) );
+    glm::mat4 yRotMat = glm::rotate(
+		    glm::mat4(1.0f),
+		    yrot * yrot_rate_multiplier,
+		    glm::normalize(glm::vec3(glm::inverse(model) * glm::vec4(0, 1, 0, 1)))
+		    );
     model = model * yRotMat;
-
     glm::mat4 modelViewMatrix = view * model;
     glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(modelViewMatrix)); // Normal Matrix.
 
