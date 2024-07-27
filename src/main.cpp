@@ -32,8 +32,8 @@ GLuint vertexbuffer;
 GLuint normalbuffer;
 
 // Rotation constants.
-const float xrot_rate_multiplier = 0.1f;
-const float yrot_rate_multiplier = 0.1f;
+const float xrot_rate_multiplier = 0.05f;
+const float yrot_rate_multiplier = 0.05f;
 
 // Rotation interface
 float xrot = 0;
@@ -146,7 +146,7 @@ void init(char* fname)
     viewID = glGetUniformLocation(programID, "view");
     projectionID = glGetUniformLocation(programID, "projection");
 
-    glm::vec4 light_ambient = glm::vec4( 0.1, 0.1, 0.1, 0.5 );
+    glm::vec4 light_ambient = glm::vec4( 0.1, 0.1, 0.1, 1.0 );
     glm::vec4 light_diffuse = glm::vec4 ( 0.8, 1.0, 1.0, 1.0 );
     glm::vec4 light_specular =glm::vec4( 0.8, 1.0, 1.0, 1.0 );
 
@@ -163,7 +163,7 @@ void init(char* fname)
                         glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
                       );
     // Model matrix : an identity matrix (model will be at the origin).
-    model      = glm::mat4(1.0f);
+    model = glm::mat4(1.0f);
 
     // Initialize a light.
     glm::vec4 lightPosition = glm::vec4(-20, -10, 0, 0);

@@ -1,7 +1,5 @@
 #version 330 core
 
-
-
 in vec3 fN;
 in vec3 fL;
 in vec3 fE;
@@ -12,7 +10,6 @@ out vec4 color;
 uniform vec4 mat_ambient;
 uniform vec4 mat_diffuse;
 uniform vec4 mat_specular;
-uniform float mat_shininess;
 
 uniform vec4 light_ambient;
 uniform vec4 light_diffuse;
@@ -21,8 +18,6 @@ uniform vec4 light_specular;
 
 void main()
 {
-
-  
   vec4 AmbientProduct = light_ambient * mat_ambient;
   vec4 DiffuseProduct = light_diffuse * mat_diffuse;
   vec4 SpecularProduct = light_specular * mat_specular;
@@ -37,16 +32,14 @@ void main()
   vec4 ambient = AmbientProduct;
   color = ambient;
   float Kd = max(dot(L, N), 0.0);
-  vec4 diffuse = Kd*DiffuseProduct;
+  vec4 diffuse = Kd * DiffuseProduct;
   float Ks = pow(max(dot(N, H), 0.0), 6.0);
-  vec4 specular = Ks*SpecularProduct;
+  vec4 specular = Ks * SpecularProduct;
   if( dot(L, N) < 0.0 )
     {
       specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
-  color +=diffuse + specular;
-  
+  color += diffuse + specular;
   color.a = 1.0f;
-
-
 }
+
