@@ -18,14 +18,15 @@ Part of the [code](http://www.cs.unm.edu/~angel/BOOK/) provided as supporting ma
 <img src="http://i.imgur.com/Acc6cw2.png" alt="Screenshot2" border="6" height="350" width="420">
 
 # Dependencies
-You need libglew and freeglut to run the code. In Ubuntu you can install like this:
-<pre>
-  sudo apt-get install -y libglew1.6-dev freeglut3-dev
-</pre>
+
+Install dependencies from Debina/Ubuntu packages:
+
+```shell
+sudo apt install libglew-dev libglut-dev libglm-dev
+```
 
 # How To Compile
 
-Type
-<pre>
-  make
-</pre>
+```shell
+make
+```
